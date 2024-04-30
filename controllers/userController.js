@@ -5,19 +5,19 @@ const { body, validationResult } = require("express-validator");
 
 const asyncHandler = require("express-async-handler");
 
-// Handle sign in form on GET
-exports.user_signin_get = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
+// Handle sign up form on GET
+exports.user_signup_get = asyncHandler(async (req, res, next) => {
+  res.render("../views/signup", { title: "User Sign Up" });
 });
 
-// Handle sign in form on POST
-exports.user_signin_post = asyncHandler(async (req, res, next) => {
+// Handle sign up form on POST
+exports.user_signup_post = asyncHandler(async (req, res, next) => {
   res.send("respond with a resource");
 });
 
 // Handle log in form on GET
 exports.user_login_get = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
+  res.render("../views/login", { title: "User Login" });
 });
 
 // Handle log in form on POST
@@ -37,7 +37,7 @@ exports.user_logout = asyncHandler(async (req, res, next) => {
 
 // Handle member form on GET
 exports.member_create_get = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
+  res.render("../views/member", { title: "Member Secret Word" });
 });
 
 // Handle member form on POST
@@ -47,7 +47,7 @@ exports.member_create_post = asyncHandler(async (req, res, next) => {
 
 // Handle admin form on GET
 exports.admin_create_get = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
+  res.render("../views/admin", { title: "Admin Secret Word" });
 });
 
 // Handle admin form on POST

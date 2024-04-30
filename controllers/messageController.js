@@ -6,12 +6,12 @@ const asyncHandler = require("express-async-handler");
 
 // display all messages (Home Page)
 exports.index = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
+  res.render("../views/index", { title: "Message Board" });
 });
 
 // handle message form on GET
 exports.message_create_GET = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
+  res.render("../views/message", { title: "Write a Message 😊" });
 });
 
 // handle message form on POST

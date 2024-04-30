@@ -5,7 +5,6 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
 
 const helmet = require("helmet");
 // Set up rate limiter: maximum of twenty requests per minute
