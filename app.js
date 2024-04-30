@@ -12,7 +12,7 @@ const helmet = require("helmet");
 const RateLimit = require("express-rate-limit");
 const limiter = RateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 60,
+  max: 120,
 });
 const compression = require("compression");
 
