@@ -9,24 +9,40 @@ const message_controller = require("../controllers/messageController");
 
 router.get("/", user_controller.index);
 
-// SIGN UP ROUTE
-router.get("/signup", function (req, res, next) {
-  res.render("index", { title: "Sign Up" });
-});
+// CREATE MESSAGE FORM on GET
+router.get("/message", message_controller.message_create_GET);
 
-// LOGIN ROUTE
-router.get("/login", function (req, res, next) {
-  res.render("index", { title: "Log In" });
-});
+// CREATE MESSAGE FORM on POST
+router.get("/message", message_controller.message_create_POST);
 
-// MEMBER ROUTE
-router.get("/member", function (req, res, next) {
-  res.render("index", { title: "Member" });
-});
+// DELETE MESSAGE on POST
+router.get("/message", message_controller.message_DELETE);
 
-// ADMIN ROUTE
-router.get("/admin", function (req, res, next) {
-  res.render("index", { title: "Admin" });
-});
+// SIGN UP ROUTE on GET
+router.get("/signup", user_controller.user_signin_get);
+
+// SIGN UP ROUTE on POST
+router.get("/signup", user_controller.user_signin_post);
+
+// LOGIN ROUTE on GET
+router.get("/login", user_controller.user_login_get);
+
+// LOGIN ROUTE on POST
+router.get("/login", user_controller.user_login_post);
+
+// LOGOUT ROUTE
+router.post("/logout", user_controller.user_logout);
+
+// MEMBER ROUTE on GET
+router.get("/member", user_controller.member_create_get);
+
+// MEMBER ROUTE on POST
+router.get("/member", user_controller.member_create_get);
+
+// ADMIN ROUTE on GET
+router.get("/admin", user_controller.admin_create_get);
+
+// ADMIN ROUTE on POST
+router.get("/admin", user_controller.admin_create_post);
 
 module.exports = router;

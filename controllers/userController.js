@@ -11,7 +11,7 @@ exports.user_signin_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle sign in form on POST
-exports.user_signin_get = asyncHandler(async (req, res, next) => {
+exports.user_signin_post = asyncHandler(async (req, res, next) => {
   res.send("respond with a resource");
 });
 
@@ -21,7 +21,7 @@ exports.user_login_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle log in form on POST
-exports.user_login_get = asyncHandler(async (req, res, next) => {
+exports.user_login_post = asyncHandler(async (req, res, next) => {
   res.send("respond with a resource");
 });
 

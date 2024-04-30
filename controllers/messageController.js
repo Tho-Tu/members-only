@@ -20,6 +20,6 @@ exports.message_create_POST = asyncHandler(async (req, res, next) => {
 });
 
 // handle message form on DELETE
-exports.message_create_DELETE = asyncHandler(async (req, res, next) => {
+exports.message_DELETE = asyncHandler(async (req, res, next) => {
   res.send("respond with a resource");
 });
