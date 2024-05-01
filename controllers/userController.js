@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Message = require("../models/message");
-
+const bcryptjs = require("bcryptjs");
+const passport = require("passport");
 const { body, validationResult } = require("express-validator");
 
 const asyncHandler = require("express-async-handler");
@@ -11,9 +12,54 @@ exports.user_signup_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle sign up form on POST
-exports.user_signup_post = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
-});
+exports.user_signup_post = [
+  body("username")
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage("Username must be specified.")
+    .isAlphanumeric()
+    .withMessage("Username has non-alphanumeric characters."),
+  body("new-password")
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage("Password must be specified."),
+  body("confirm-password")
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage("Confirmed password must be specified.")
+    .custom((value, { req }) => {
+      if (value !== req.body["new-password"]) {
+        throw new Error("Passwords do not match");
+      }
+      return true;
+    }),
+
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    const user = new User({
+      username: req.body.username,
+      password: req.body["confirm-password"],
+      member_status: false,
+      admin_status: false,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("../views/signup", {
+        title: "User Sign Up",
+        user: user,
+        errors: errors.array(),
+      });
+    } else {
+      await user.save();
+      res.redirect("/");
+    }
+  }),
+];
 
 // Handle log in form on GET
 exports.user_login_get = asyncHandler(async (req, res, next) => {
@@ -21,8 +67,9 @@ exports.user_login_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle log in form on POST
-exports.user_login_post = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
+exports.user_login_post = passport.authenticate("local", {
+  successRedirect: "/",
+  failureRedirect: "/login",
 });
 
 // Handle log out on POST

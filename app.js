@@ -1,6 +1,8 @@
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
+const session = require("express-session");
+const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
@@ -18,6 +20,7 @@ const compression = require("compression");
 const ejsLayout = require("express-ejs-layouts");
 require("dotenv").config();
 
+// run application
 const app = express();
 
 // Set up mongoose connection
@@ -56,6 +59,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// session config
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // Equals 1 day (1 day * 24 hr/1 day * 60min/1hr * 60sec/1min * 1000ms/1sec)
+    },
+  })
+);
+
+// passport authentication
+require("./config/passport");
+app.use(passport.session());
+
+// routes
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
