@@ -1,7 +1,9 @@
 <h1><%= title %></h1>
 
+<% if (locals.user && locals.user.member_status === true) { %>
+<p>You are already a member.</p>
+<% } else if (locals.user &&locals.user.member_status === false) { %>
 <form action="member" method="POST">
-  <% if (locals.user) { %>
   <div class="form-group">
     <label for="member-secret">Secret Word</label>
     <input

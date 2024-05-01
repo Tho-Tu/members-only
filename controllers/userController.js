@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const Message = require("../models/message");
 const bcryptjs = require("bcryptjs");
 const passport = require("passport");
 const { body, validationResult } = require("express-validator");
@@ -106,9 +105,44 @@ exports.member_create_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle member form on POST
-exports.member_create_post = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
-});
+exports.member_create_post = [
+  body("member-secret")
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage("Secret word must be specified (with at least 3 characters).")
+    .custom(async (value) => {
+      if (value === "member") {
+        return true;
+      } else {
+        throw new Error("Wrong secret word");
+      }
+    }),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const user = new User({
+      username: req.user.username,
+      password: req.user.password,
+      member_status: true,
+      admin_status: req.user.admin_status,
+      _id: req.user._id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("../views/member", {
+        title: "Member Secret Word",
+        user: req.user,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const updatedUser = await User.findByIdAndUpdate(req.user._id, user, {});
+      res.redirect("/");
+    }
+  }),
+];
 
 // Handle admin form on GET
 exports.admin_create_get = asyncHandler(async (req, res, next) => {
@@ -116,6 +150,41 @@ exports.admin_create_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle admin form on POST
-exports.admin_create_post = asyncHandler(async (req, res, next) => {
-  res.send("respond with a resource");
-});
+exports.admin_create_post = [
+  body("admin-secret")
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage("Secret word must be specified (with at least 3 characters).")
+    .custom(async (value) => {
+      if (value === "admin") {
+        return true;
+      } else {
+        throw new Error("Wrong secret word");
+      }
+    }),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const user = new User({
+      username: req.user.username,
+      password: req.user.password,
+      member_status: req.user.member_status,
+      admin_status: true,
+      _id: req.user._id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("../views/member", {
+        title: "Member Secret Word",
+        user: req.user,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const updatedUser = await User.findByIdAndUpdate(req.user._id, user, {});
+      res.redirect("/");
+    }
+  }),
+];

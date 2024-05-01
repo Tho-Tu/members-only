@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
+
+// protected routes
+const isAuth = require("./authMiddleware").isAuth;
+const isAdmin = require("./authMiddleware").isAdmin;
 
 // Require controller modules
 const user_controller = require("../controllers/userController");
@@ -14,10 +17,10 @@ router.get("/", message_controller.index);
 router.get("/message", message_controller.message_create_get);
 
 // CREATE MESSAGE FORM on POST
-router.post("/message", message_controller.message_create_post);
+router.post("/message", isAuth, message_controller.message_create_post);
 
 // DELETE MESSAGE on POST
-router.get("/message", message_controller.message_delete);
+router.get("/message", isAdmin, message_controller.message_delete);
 
 // SIGN UP ROUTE on GET
 router.get("/signup", user_controller.user_signup_get);
@@ -38,12 +41,12 @@ router.get("/logout", user_controller.user_logout);
 router.get("/member", user_controller.member_create_get);
 
 // MEMBER ROUTE on POST
-router.post("/member", user_controller.member_create_post);
+router.post("/member", isAuth, user_controller.member_create_post);
 
 // ADMIN ROUTE on GET
 router.get("/admin", user_controller.admin_create_get);
 
 // ADMIN ROUTE on POST
-router.post("/admin", user_controller.admin_create_post);
+router.post("/admin", isAuth, user_controller.admin_create_post);
 
 module.exports = router;
