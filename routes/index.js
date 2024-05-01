@@ -11,13 +11,13 @@ const message_controller = require("../controllers/messageController");
 router.get("/", message_controller.index);
 
 // CREATE MESSAGE FORM on GET
-router.get("/message", message_controller.message_create_GET);
+router.get("/message", message_controller.message_create_get);
 
 // CREATE MESSAGE FORM on POST
-router.post("/message", message_controller.message_create_POST);
+router.post("/message", message_controller.message_create_post);
 
 // DELETE MESSAGE on POST
-router.get("/message", message_controller.message_DELETE);
+router.get("/message", message_controller.message_delete);
 
 // SIGN UP ROUTE on GET
 router.get("/signup", user_controller.user_signup_get);
@@ -38,7 +38,7 @@ router.get("/logout", user_controller.user_logout);
 router.get("/member", user_controller.member_create_get);
 
 // MEMBER ROUTE on POST
-router.post("/member", user_controller.member_create_get);
+router.post("/member", user_controller.member_create_post);
 
 // ADMIN ROUTE on GET
 router.get("/admin", user_controller.admin_create_get);

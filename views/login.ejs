@@ -1,6 +1,6 @@
 <h1><%= title %></h1>
 
-<form method="POST">
+<form action="/login" method="POST">
   <div class="form-group">
     <label for="username">Username</label>
     <input type="text" class="form-control" id="username" name="username" />
@@ -12,10 +12,10 @@
   <button type="submit" class="button-submit">Submit</button>
 </form>
 
-<% if (locals.errors) { %>
+<% if (locals.errors && locals.errors.length > 0) { %>
 <ul>
-  <% errors.forEach(function(error) { %>
-  <li><%= error.msg %></li>
-  <% }); %>
+  <% errors.forEach(error => { %>
+  <li><%= error %></li>
+  <% }) %>
 </ul>
 <% } %>

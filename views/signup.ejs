@@ -1,6 +1,9 @@
 <h1><%= title %></h1>
 
-<form method="POST">
+<% if (locals.user) { %>
+<p>Already signed in!</p>
+<% } else { %>
+<form action="signin" method="POST">
   <div class="form-group">
     <label for="username">Username</label>
     <input
@@ -31,8 +34,7 @@
   </div>
   <button type="submit" class="button-submit">Submit</button>
 </form>
-
-<% if (locals.errors) { %>
+<% } %> <% if (locals.errors) { %>
 <ul>
   <% errors.forEach(function(error) { %>
   <li><%= error.msg %></li>

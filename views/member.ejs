@@ -1,6 +1,7 @@
 <h1><%= title %></h1>
 
-<form method="POST">
+<form action="member" method="POST">
+  <% if (locals.user) { %>
   <div class="form-group">
     <label for="member-secret">Secret Word</label>
     <input
@@ -12,8 +13,9 @@
   </div>
   <button type="submit" class="button-submit">Submit</button>
 </form>
-
-<% if (locals.errors) { %>
+<% } else { %>
+<p>You are not logged in.</p>
+<% } %> <% if (locals.errors) { %>
 <ul>
   <% errors.forEach(function(error) { %>
   <li><%= error.msg %></li>

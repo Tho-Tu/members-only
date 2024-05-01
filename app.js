@@ -2,6 +2,7 @@ const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
+const flash = require("connect-flash");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
@@ -20,11 +21,14 @@ const compression = require("compression");
 const ejsLayout = require("express-ejs-layouts");
 require("dotenv").config();
 
+const mongoose = require("mongoose");
+
 // run application
 const app = express();
 
 // Set up mongoose connection
-const mongoose = require("mongoose");
+
+// Set up mongoose connection
 mongoose.set("strictQuery", false);
 const mongoDB = process.env.MONGODB_URI;
 
@@ -32,6 +36,8 @@ main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
 }
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "mongo connection error"));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -65,6 +71,7 @@ app.use(
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
+    store: new session.MemoryStore(),
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // Equals 1 day (1 day * 24 hr/1 day * 60min/1hr * 60sec/1min * 1000ms/1sec)
     },
@@ -74,6 +81,7 @@ app.use(
 // passport authentication
 require("./config/passport");
 app.use(passport.session());
+app.use(flash());
 
 // routes
 app.use("/", indexRouter);

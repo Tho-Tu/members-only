@@ -8,7 +8,7 @@ const asyncHandler = require("express-async-handler");
 
 // Handle sign up form on GET
 exports.user_signup_get = asyncHandler(async (req, res, next) => {
-  res.render("../views/signup", { title: "User Sign Up" });
+  res.render("../views/signup", { title: "User Sign Up", user: req.user });
 });
 
 // Handle sign up form on POST
@@ -78,40 +78,14 @@ exports.user_signup_post = [
 
 // Handle log in form on GET
 exports.user_login_get = asyncHandler(async (req, res, next) => {
-  res.render("../views/login", { title: "User Login" });
+  res.render("../views/login", { title: "User Login", user: req.user });
 });
 
 // Handle log in form on POST
-exports.user_login_post = [
-  body("username")
-    .trim()
-    .isLength({ min: 3 })
-    .escape()
-    .withMessage("Username must be specified (with at least 3 characters).")
-    .custom(async (value) => {
-      const user = await User.findOne({ username: value }).exec();
-      if (!user) {
-        throw new Error("Username does not exist.");
-      }
-    }),
-
-  asyncHandler(async (req, res, next) => {
-    // Extract the validation errors from a request.
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      res.render("../views/login", {
-        title: "User Login",
-        errors: errors.array(),
-      });
-    }
-  }),
-
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-  }),
-];
+exports.user_login_post = passport.authenticate("local", {
+  successRedirect: "/",
+  failureRedirect: "/login",
+});
 
 // Handle log out on GET
 exports.user_logout = asyncHandler(async (req, res, next) => {
@@ -125,7 +99,10 @@ exports.user_logout = asyncHandler(async (req, res, next) => {
 
 // Handle member form on GET
 exports.member_create_get = asyncHandler(async (req, res, next) => {
-  res.render("../views/member", { title: "Member Secret Word" });
+  res.render("../views/member", {
+    title: "Member Secret Word",
+    user: req.user,
+  });
 });
 
 // Handle member form on POST
@@ -135,7 +112,7 @@ exports.member_create_post = asyncHandler(async (req, res, next) => {
 
 // Handle admin form on GET
 exports.admin_create_get = asyncHandler(async (req, res, next) => {
-  res.render("../views/admin", { title: "Admin Secret Word" });
+  res.render("../views/admin", { title: "Admin Secret Word", user: req.user });
 });
 
 // Handle admin form on POST
