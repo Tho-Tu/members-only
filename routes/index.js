@@ -1,5 +1,6 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const passport = require("passport");
 
 // Require controller modules
 const user_controller = require("../controllers/userController");
@@ -31,7 +32,7 @@ router.get("/login", user_controller.user_login_get);
 router.post("/login", user_controller.user_login_post);
 
 // LOGOUT ROUTE
-router.post("/logout", user_controller.user_logout);
+router.get("/logout", user_controller.user_logout);
 
 // MEMBER ROUTE on GET
 router.get("/member", user_controller.member_create_get);

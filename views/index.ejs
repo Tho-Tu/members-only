@@ -1,2 +1,8 @@
 <h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
+<p>
+  Welcome <% if (locals.user) { %>
+  <span><%= user.username %></span>
+  <% } else { %>
+  <span>to <%= title %></span>
+  <% } %>
+</p>

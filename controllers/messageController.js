@@ -6,7 +6,7 @@ const asyncHandler = require("express-async-handler");
 
 // display all messages (Home Page)
 exports.index = asyncHandler(async (req, res, next) => {
-  res.render("../views/index", { title: "Message Board" });
+  res.render("../views/index", { title: "Message Board", user: req.user });
 });
 
 // handle message form on GET

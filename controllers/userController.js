@@ -82,12 +82,38 @@ exports.user_login_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle log in form on POST
-exports.user_login_post = passport.authenticate("local", {
-  successRedirect: "/",
-  failureRedirect: "/login",
-});
+exports.user_login_post = [
+  body("username")
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage("Username must be specified (with at least 3 characters).")
+    .custom(async (value) => {
+      const user = await User.findOne({ username: value }).exec();
+      if (!user) {
+        throw new Error("Username does not exist.");
+      }
+    }),
 
-// Handle log out on POST
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("../views/login", {
+        title: "User Login",
+        errors: errors.array(),
+      });
+    }
+  }),
+
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  }),
+];
+
+// Handle log out on GET
 exports.user_logout = asyncHandler(async (req, res, next) => {
   req.logout((err) => {
     if (err) {
