@@ -17,3 +17,11 @@
   </div>
   <button type="submit" class="button-submit">Submit</button>
 </form>
+
+<% if (locals.errors) { %>
+<ul>
+  <% errors.forEach(function(error) { %>
+  <li><%= error.msg %></li>
+  <% }); %>
+</ul>
+<% } %>

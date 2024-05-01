@@ -17,19 +17,27 @@ exports.user_signup_post = [
     .trim()
     .isLength({ min: 3 })
     .escape()
-    .withMessage("Username must be specified.")
+    .withMessage("Username must be specified (with at least 3 characters).")
     .isAlphanumeric()
-    .withMessage("Username has non-alphanumeric characters."),
+    .withMessage("Username has non-alphanumeric characters.")
+    .custom(async (value) => {
+      const user = await User.findOne({ username: value }).exec();
+      if (user) {
+        throw new Error("Username already in use.");
+      }
+    }),
   body("new-password")
     .trim()
     .isLength({ min: 3 })
     .escape()
-    .withMessage("Password must be specified."),
+    .withMessage("Password must be specified (with at least 3 characters)."),
   body("confirm-password")
     .trim()
     .isLength({ min: 3 })
     .escape()
-    .withMessage("Confirmed password must be specified.")
+    .withMessage(
+      "Confirmed password must be specified (with at least 3 characters)."
+    )
     .custom((value, { req }) => {
       if (value !== req.body["new-password"]) {
         throw new Error("Passwords do not match");
@@ -41,23 +49,30 @@ exports.user_signup_post = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    const user = new User({
-      username: req.body.username,
-      password: req.body["confirm-password"],
-      member_status: false,
-      admin_status: false,
-    });
+    bcryptjs.hash(req.body["new-password"], 10, async (err, hashedPassword) => {
+      if (err) {
+        next(err);
+      }
+      // otherwise, store hashedPassword in DB
 
-    if (!errors.isEmpty()) {
-      res.render("../views/signup", {
-        title: "User Sign Up",
-        user: user,
-        errors: errors.array(),
+      const user = new User({
+        username: req.body.username,
+        password: hashedPassword,
+        member_status: false,
+        admin_status: false,
       });
-    } else {
-      await user.save();
-      res.redirect("/");
-    }
+
+      if (!errors.isEmpty()) {
+        res.render("../views/signup", {
+          title: "User Sign Up",
+          user: user,
+          errors: errors.array(),
+        });
+      } else {
+        await user.save();
+        res.redirect("/login");
+      }
+    });
   }),
 ];
 
