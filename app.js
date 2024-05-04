@@ -83,12 +83,6 @@ require("./config/passport");
 app.use(passport.session());
 app.use(flash());
 
-app.use((req, res, next) => {
-  console.log(req.session);
-  console.log(req.user);
-  next();
-});
-
 // routes
 app.use("/", indexRouter);
 
