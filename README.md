@@ -4,8 +4,8 @@ This project is an example of MVC (Model-View-Controller) architecture and authe
 
 ## Gain access
 
-Member password: member
-Admin password: admin
+- Member password: member
+- Admin password: admin
 
 ## Technologies Used
 
