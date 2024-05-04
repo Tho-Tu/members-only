@@ -170,7 +170,7 @@ exports.admin_create_post = [
     const user = new User({
       username: req.user.username,
       password: req.user.password,
-      member_status: req.user.member_status,
+      member_status: true,
       admin_status: true,
       _id: req.user._id,
     });
