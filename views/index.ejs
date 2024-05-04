@@ -2,7 +2,32 @@
 <p>
   Welcome <% if (locals.user) { %>
   <span><%= user.username %></span>
+  <div><a href="/message">Write a message</a></div>
   <% } else { %>
   <span>to <%= title %></span>
   <% } %>
 </p>
+<div>
+  <% if (locals.messages) { %>
+    <% messages.forEach(function(message) { %>
+      <div class="message">
+        <h3><%= message.title %></h3>
+        <% if (locals.user && locals.user.member_status === true) { %>
+          <div> Author: <%= message.user.username %></div>
+          <% } %>
+        <p>Message: <%= message.message %></p>
+        <p>Date created: <%= message.date_formatted %></p>
+      </div>
+      <% if (locals.user && locals.user.admin_status === true) { %>
+        <form action="delete" method="POST">
+          <input
+          type="hidden"
+          name="messageid"
+          value="<%= message._id %>"/>
+          <button type="submit">Delete Post</button>
+        </form>
+      <% } %>
+    <% }); %>
+
+  <% } %>
+</div>

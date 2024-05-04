@@ -7,6 +7,7 @@ const MessageSchema = new Schema({
   title: { type: String, required: true, maxLength: 100 },
   message: { type: String, required: true, maxLength: 200 },
   time: { type: Date, default: Date.now },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 MessageSchema.virtual("date_formatted").get(function () {

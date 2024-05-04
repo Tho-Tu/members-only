@@ -20,7 +20,7 @@ router.get("/message", message_controller.message_create_get);
 router.post("/message", isAuth, message_controller.message_create_post);
 
 // DELETE MESSAGE on POST
-router.get("/message", isAdmin, message_controller.message_delete);
+router.post("/delete", isAdmin, message_controller.message_delete);
 
 // SIGN UP ROUTE on GET
 router.get("/signup", user_controller.user_signup_get);
