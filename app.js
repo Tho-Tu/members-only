@@ -27,8 +27,6 @@ const mongoose = require("mongoose");
 const app = express();
 
 // Set up mongoose connection
-
-// Set up mongoose connection
 mongoose.set("strictQuery", false);
 const mongoDB = process.env.MONGODB_URI;
 
@@ -82,6 +80,12 @@ app.use(
 require("./config/passport");
 app.use(passport.session());
 app.use(flash());
+
+// app.use((req, res, next) => {
+//   console.log(req.session); // session property from app.use(session)
+//   console.log(req.user); // user property from (app.use(passport.session())
+//   next();
+// });
 
 // routes
 app.use("/", indexRouter);
